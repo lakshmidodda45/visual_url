@@ -1,0 +1,1255 @@
+<html>
+  <head>
+    <style>
+      
+      #LayoutSaveContainer
+      {
+        height:30px;
+        position:relative;
+        background-color:#d0d0ff;
+        padding-left:10px;
+        padding-right:10px;
+        padding-top:10px;
+        padding-bottom:0px;
+        overflow:hidden;
+
+      }
+      #ViewName
+      {
+        position:absolute;
+        top:10px;
+        left:10px;
+        height:22px;
+        width:150px;
+        resize:none;
+        font-family:arial;
+        font-size:12px;
+        margin:0px;
+
+      }
+      #SaveLayoutButton
+      {
+        position:absolute;
+        top:10px;
+        left:170px;
+        display:inline;
+        height:23px;
+        width:100px;
+        font-family:arial;
+        font-size:12px;
+        margin-bottom:6px;
+
+      }
+
+      #LayoutContainer
+      {
+
+        background-color:#dadaff;
+        height:50px;
+        padding-top:2px;
+        overflow:hidden;
+        /* border-bottom:solid grey 1px; */
+      }
+      #LayoutList
+      {
+        /*position:relative;*/
+        /*display:inline-block;*/
+        height:50px;
+        padding-left:10px;
+        padding-right:10px;
+        min-width:400px;
+        overflow:auto;
+      }
+      .LayoutListEntry
+      {
+        display:inline-block;
+        position:relative;
+        width: 140px;
+        height: 30px;
+        margin: 2px;
+        border: solid #8f8f9d 1px;
+        border-radius:5px;
+        background-color:#e9e9ed;
+        text-align: left;
+        cursor:pointer;
+
+      }
+      .LayoutFavIconBox{
+        display:inline-block;
+        float:left;
+        height:15px;
+        width:15px;
+        margin-top:1px;
+        padding-top:6px;
+        padding-left:6px;
+        padding-right:6px;
+        padding-bottom:7px;
+      }
+      .LayoutFavIconBox:hover
+      {
+        display:inline-block;
+        float:left;
+        height:15px;
+        width:15px;
+        margin-top:1px;
+        padding-top:6px;
+        padding-left:6px;
+        padding-right:6px;
+        padding-bottom:7px;
+        background-color:#d9d9dd;
+        border-radius:5px;
+      }
+      .LayoutFavIconBox svg
+      {
+        fill:white;
+      }
+      .LayoutCloseIconBox{
+        display:inline-block;
+        float:right;
+        height:10px;
+        width:10px;
+        margin-top:1px;
+        padding-top:9px;
+        padding-left:6px;
+        padding-right:6px;
+        padding-bottom:10px;
+      }
+      .LayoutCloseIconBox:hover
+      {
+        display:inline-block;
+        float:right;
+        height:10px;
+        width:10px;
+        margin-top:1px;
+        padding-top:9px;
+        padding-left:6px;
+        padding-right:6px;
+        padding-bottom:10px;
+        background-color:#d9d9dd;
+        border-radius:5px;
+      }
+      .LayoutListEntryTextbox
+      {
+        display:inline-block;
+        float:left;
+        height:29px;
+        width:90px;
+        margin-top:1px;
+        padding-top:0px;
+        padding-bottom:0px;
+        font-family:arial;
+        font-size:12px;
+      }
+      .LayoutListEntryTextbox:hover
+      {
+        display:inline-block;
+        float:left;
+        height:29px;
+        width:90px;
+        margin-top:1px;
+        padding-top:0px;
+        padding-bottom:0px;
+        font-family:arial;
+        font-size:12px;
+        background-color:#d9d9dd;
+      }
+      .LayoutListEntryText
+      {
+        position:relative;
+        float:left;
+        height:13px;
+        width:90px;
+        margin-top:8px;
+        margin-bottom:8px;
+        margin-left:4px;
+        margin-right:4px;
+        font-family:arial;
+        font-size:12px;
+      }
+      #VisualChoiceContainer
+      {
+
+        height:50px;
+        padding-left:10px;
+        padding-right:10px;
+        background-color:#eaeaff;
+        overflow:auto;
+      }
+
+      #VisualChoiceContainer div
+      {
+        display:inline-block;
+        position:relative;
+        width: 140px;
+        height: 30px;
+        padding: 0px;
+        margin: 2px;
+        border: solid #8f8f9d 1px;
+        border-radius:5px;
+        background-color:#e9e9ed;
+        text-align: center;
+        cursor:move;
+      }
+      #VisualChoiceContainer div:hover
+      {
+        display:inline-block;
+        width: 140px;
+        height: 30px;
+        padding: 0px;
+        margin: 2px;
+        border: solid #444444 1px;
+        border-radius:5px;
+        background-color:#d9d9dd;
+        text-align: center;
+        cursor:move;
+      }
+      #VisualChoiceContainer div img
+      {
+        float:left;
+        width: 24px;
+        height: 24px;
+        padding-left: 10px;
+        padding-top:2px;
+        padding-bottom:2px;
+        margin: 0px;
+      }
+      #VisualChoiceContainer div h5
+      {
+        display:inline-block;
+        width: 80px;
+        height: 30px;
+        padding-top:9px;
+        padding-bottom:9px;
+        margin: 0px;
+        font-size:12px;
+      }
+      #OuterContainer
+      {
+        position:relative;
+        height:75vh;
+        width:calc( 100vw - 2px);
+        border:solid white 1px;
+        margin: 0px;
+        overflow:hidden;
+        z-index:5;
+      }
+      .VisualContainer
+      {
+        position:absolute;
+        height:10vh;
+        width:10vh;
+        border:solid white 1px;
+        background-color:#eeeeee;
+        cursor:move;
+      }
+      .DragControlBoundary
+      {
+        position:absolute;
+        /* border:solid grey 1px; */
+      }
+      .DragControl
+      {
+        position:absolute;
+        top:0px;
+        left:-10px;
+        height:5px;
+        width:5px;
+        border:solid black 1px;
+        z-index:2147483647;
+      }
+      .TouchDevice .DragControl
+      {
+        position:absolute;
+        top:0px;
+        left:-10px;
+        height:10px;
+        width:10px;
+        border:solid black 1px;
+        z-index:2147483647;
+      }
+      body {margin:0;overflow:hidden; height:100vh; width:100vw; font-family:arial;}
+      .visualIframe
+      {
+        border:0px;
+        margin:7px !important;
+        padding:0px;
+        height: calc( 100% - 14px );
+        width: calc( 100% - 14px );
+      }
+    </style>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+    <script>
+      objRepo={}
+      outerContainerProps={}
+      currentVisualProps={}
+      innerBoxProps={}
+      innerBoxProps.height = 50;
+      innerBoxProps.width = 50;
+      updateInterval=2;
+      controlDim=5;
+      visualDim=252;
+      awsData={
+        apiGatewayUrl:'https://88l9ndoctg.execute-api.us-east-1.amazonaws.com/demo/demo-central/',
+        dashboardId:'682876fd-6056-42bb-9487-f8136a9b275b',
+        sheetId:'682876fd-6056-42bb-9487-f8136a9b275b_bdafe2e5-aeda-4d87-ae12-d329dfe6dab5',
+        imgPath:'https://democentral.learnquicksight.online/v2/other/VisualEmbed/',
+        debugMode:true,
+        visualQueue1:[],
+        visualQueue2:[],
+        originUrl : 'https://democentral.learnquicksight.online',
+        reuseSession : '',
+        sessionEmbedId1 : '',
+        sessionEmbedId2 : '',
+        dctoken : ''
+      }
+
+      $(document).ready(function(){
+        InitializeParameters(1);
+      });
+      
+      function InitializeParameters(retryCount){
+        WriteDebugInfo('In InitializeParameters function');
+        window.top.postMessage({'MesgType':'VisualEmbed-InitializeParameters','MesgPayload':{'retryCount':retryCount}},'*');
+        window.addEventListener("message", ProcessMessage, false);
+      }
+      function ProcessMessage(Event){
+        WriteDebugInfo('VisualEmbed-ProcessMessage');
+        WriteDebugInfo(Event);
+        if ( awsData.originUrl.indexOf(Event.origin) == -1)
+          return;
+      
+        if (Event.data['MesgType'] == 'VisualEmbed-InitializeParametersResponse'){
+            awsData.reuseSession = Event.data['MesgPayload']['reuseSession'];
+            awsData.sessionEmbedId1 = Event.data['MesgPayload']['sessionEmbedId1'];
+            awsData.sessionEmbedId2 = Event.data['MesgPayload']['sessionEmbedId2'];
+            awsData.dctoken = Event.data['MesgPayload']['dctoken'];
+            
+            if (awsData.reuseSession == 'yes') {
+              if ( Event.data['MesgPayload']['retryCount'] < 10 ) {
+                if (awsData.sessionEmbedId1 && awsData.sessionEmbedId2){
+                  MainWorkflow();
+                }
+                else{
+                  setTimeout(InitializeParameters( ++Event.data['MesgPayload']['retryCount'] ), 2000);
+                }
+              }
+              else{
+                console.log('Embed session not available from DemoCentral');
+              }
+            }
+            else{
+              MainWorkflow();
+            }
+            
+        }
+        WriteDebugInfo('VisualEmbed-ProcessMessage - End');
+      }
+      
+      function MainWorkflow(){
+        InitVisualInteraction();
+      
+        LoadLayoutNames();
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        if (layoutInfo.favorite){
+          viewName = layoutInfo.favorite;
+          LoadLayout(viewName,'Layout'+viewName);
+        }
+        else if (Object.keys(layoutInfo)[0])
+        {
+          viewName = Object.keys(layoutInfo)[0];
+          LoadLayout(viewName,'Layout'+viewName);
+        }
+        else {
+          viewName = 'View1';
+          $('#ViewName')[0].value = viewName;
+          objRepo.outerContainer.append("<div class='InitialMessage' style='height:100%;width:100%;padding-top:5%;text-align:center;'><h4 style='font-family:arial;font-size:18px;color:grey;'>Drag visuals from top panel to create your own Info space.</h4></div>");
+        }
+        
+        // $(document).on('touchstart touchmove touchend touchcancel', TouchHandler);
+        $('.DragControl, .VisualChoice, .VisualContainer').on('touchstart touchmove touchend touchcancel', TouchHandler);
+        
+        $("#VisualChoiceContainer div").draggable({
+            revert: "invalid", // when not dropped, the item will revert back to its initial position
+            containment: "#VisualBoundary",
+            helper: function( event ) {
+              imgSrc = event.currentTarget.firstChild.src;
+              visualDim = Math.floor(($('#OuterContainer').width()*20/100))+2;
+              if (visualDim < innerBoxProps.height + controlDim*2 ) {
+                visualDim = innerBoxProps.height + controlDim*2;
+              }
+              return $( "<div class='VisualContainer' style='height:" + visualDim +"px;width:"+visualDim+"px;border-radius:0px;z-index:90;'><img src='"+imgSrc+"' style='height:75%;width:75%;padding-top:10%;padding-left:10%;'></img></div>" );
+            },
+            cursor: "move",
+            cursorAt: { top: 0, left: 0 },
+            start: function() {
+              $('.visualIframe').css('pointer-events','none');
+            },
+            drag: function(){
+              $('#OuterContainer').css('border-color','#219fd7');
+            },
+            stop: function() {
+              $('.visualIframe').css('pointer-events','auto');
+            }
+          });
+          $('#OuterContainer').droppable({
+          accept: ".VisualChoice",
+          drop: function( event, ui ) {
+            AddVisual( ui.draggable );
+            $('#OuterContainer').css('border-color','white');
+          }
+        });
+      }
+
+      function WriteDebugInfo(debugInfo){
+        if (awsData.debugMode)
+        {
+          console.log(debugInfo);
+        }
+      }
+
+      function TouchHandler(Event){
+        console.log(Event)
+        Event.preventDefault();
+        let Touch = Event.changedTouches[0];
+  
+        let SimulatedEvent = new MouseEvent({
+            touchstart: "mousedown",
+            touchmove: "mousemove",
+            touchend: "mouseup"
+        } [Event.type], {
+            view: window,
+            bubbles: true,
+            cancelable: true,
+            screenX:Touch.screenX, 
+            screenY:Touch.screenY,
+            clientX:Touch.clientX, 
+            clientY:Touch.clientY, 
+            ctrlKey:false,
+            shiftKey:false,
+            altKey:false,
+            metaKey:false,
+            button:0
+            });
+            
+        Touch.target.dispatchEvent(SimulatedEvent);
+        
+      }
+
+      function GetCookie(name) {
+        WriteDebugInfo('In GetCookie function');
+        var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+        return v ? v[2] : '{}';
+      }
+
+      function SetCookie(name, value, age) {
+        WriteDebugInfo('In SetCookie function');
+        document.cookie = name + "=" + value +"; Max-Age="+age+";SameSite=None;Secure";
+      }
+
+      function SaveLayout(){
+        WriteDebugInfo('In SaveLayout function');
+        viewName = $('#ViewName')[0].value.replace(/[^a-zA-Z0-9- ]/g, '').replace(' ','-');
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        visualContainers = [];
+        $.each($('.VisualContainer'),function(index,value){
+            visualContainer = $('#'+value.id);
+            visualContainers[index] = {};
+            visualContainers[index].id = value.id;
+            visualContainers[index].top = visualContainer.css('top').replace('px','');
+            visualContainers[index].left = visualContainer.css('left').replace('px','');
+            visualContainers[index].height = visualContainer.height();
+            visualContainers[index].width = visualContainer.width();
+          }
+        );
+        layoutInfo[viewName] = {};
+        layoutInfo[viewName].outerContainerWidth = objRepo.outerContainer.width();
+        layoutInfo[viewName].visualContainers = visualContainers;
+        SetCookie('DCVisualEmbedLayouts', JSON.stringify(layoutInfo),604800)
+        LoadLayoutNames();
+        $('#Layout'+viewName).css('border-color','blue');
+      }
+
+      function LoadLayout(viewName, layoutListEntryId){
+        WriteDebugInfo('In LoadLayout function');
+        $('#LayoutContainer').css('cursor','not-allowed');
+        $('#LayoutContainer').attr('title','Please wait - Loading visuals.');
+        $('.LayoutListEntry').css('pointer-events','none');
+        
+        $('.LayoutListEntry').css('border-color','#8f8f9d');
+        $('#'+layoutListEntryId).css('border-color','blue');
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        $('#ViewName')[0].value = viewName;
+        // objRepo.outerContainer.empty();
+        HideControls();
+        $('.VisualContainer, .InitialMessage').remove();
+        ResetVisualChoiceState();
+        scaleFactor = objRepo.outerContainer.width()/layoutInfo[viewName].outerContainerWidth;
+
+        for (index in layoutInfo[viewName].visualContainers){
+          visualContainer = layoutInfo[viewName].visualContainers[index];
+          visualChoiceId = visualContainer.id.replace('Visual','VisualChoice');
+          ChangeVisualChoiceState(visualChoiceId,'disable');
+          imgSrc = $('#'+visualChoiceId +' img')[0].src;
+          objRepo.outerContainer.append("<div id='" + visualContainer.id + "' style='top:" + visualContainer.top * scaleFactor +"px;left:" + visualContainer.left * scaleFactor + "px;height:" + visualContainer.height * scaleFactor +"px;width:"+visualContainer.width * scaleFactor +"px;' class='VisualContainer' onclick='focusVisual(this.id)'><div style='height:10%;'></div><img src='"+imgSrc+"' style='height:75%;width:75%;padding-left:10%;'></img></div>");
+          objRepo.currentVisual = $('#'+visualContainer.id);
+          ConvertAnchorToPercentage();
+          $('#'+visualContainer.id).draggable({
+                                      containment: "#OuterContainer",
+                                      start:function(){
+                                        HideControls();
+                                        $('#OuterContainer').css('border-color','#219fd7');
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag:function(){},
+                                      stop: function(){
+                                        objRepo.currentVisual = $('#'+this.id);
+                                        ConvertAnchorToPercentage();
+                                        $('#OuterContainer').css('border-color','white');
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+          QueueVisualLoad((index%2)+1, visualContainer.id, $('#'+visualContainer.id.replace('Visual','VisualChoice'))[0].dataset.visualid );
+        }
+        if ( awsData.visualQueue1.length > 0 ){
+          awsData.visualQueue1.shift()();
+        }
+        if ( awsData.visualQueue2.length > 0 ){
+          awsData.visualQueue2.shift()();
+        }
+      }
+
+      function DeleteLayout(layoutListEntryCloseId){
+        WriteDebugInfo('In DeleteLayout function');
+        viewName = $('#'+layoutListEntryCloseId).parent()[0].dataset.viewname;
+        layoutListEntryId = $('#'+layoutListEntryCloseId).parent()[0].id;
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        delete layoutInfo[viewName];
+        if (layoutInfo.favorite){
+          if (layoutInfo.favorite == viewName){
+            delete layoutInfo.favorite;
+          }
+        }
+        SetCookie('DCVisualEmbedLayouts', JSON.stringify(layoutInfo),604800);
+        $('#'+layoutListEntryId).remove();
+        event.stopPropagation();
+      }
+
+      function LoadLayoutNames(){
+        WriteDebugInfo('In LoadLayoutNames function');
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        keyArray = Object.keys(layoutInfo);
+        
+        $('#LayoutList').empty();
+        for (index in keyArray){
+          keyValue = keyArray[index];
+          if(keyValue.length > 12) {
+            keyValueDisplay = keyValue.substring(0,10)+'..';
+          }
+          else {
+            keyValueDisplay = keyValue;
+          }
+          
+          if ( keyValue != 'favorite'){
+            $('#LayoutList').append("<div id='Layout" + keyValue + "'  data-viewname='" + keyValue + "' class='LayoutListEntry' onclick='LoadLayout(this.dataset.viewname, this.id)'><div id='LayoutFav" + keyValue + "' class='LayoutFavIconBox' onclick='SetFavorite(this.id)'><svg focusable='false' viewBox='0 0 24 24' aria-hidden='true'><path d='M17.56 21.54a.92.92 0 0 1-.46-.11L12 18.75l-5.1 2.68a1 1 0 0 1-1.05-.08 1 1 0 0 1-.4-1l1-5.67-4.12-4A1 1 0 0 1 2.85 9l5.7-.83L11.1 3a1 1 0 0 1 1.8 0l2.55 5.16 5.7.83a1 1 0 0 1 .55 1.71l-4.12 4 1 5.67a1 1 0 0 1-.4 1 1 1 0 0 1-.62.17z'></path></svg></div><div class='LayoutListEntryTextbox'><h5 class='LayoutListEntryText' title='" + keyValue + "'>" + keyValueDisplay + "</h5></div><div id='LayoutClose" + keyValue + "' class='LayoutCloseIconBox' onclick='DeleteLayout(this.id)'><svg viewBox='0 0 24 24' ><path d='M20 18.46a1 1 0 0 1-1.41 1.41L12 13.29l-6.59 6.58A1 1 0 0 1 4 18.46l6.59-6.59L4 5.29a1 1 0 0 1 0-1.42 1 1 0 0 1 1.41 0L12 10.46l6.59-6.59a1 1 0 0 1 1.41 0 1 1 0 0 1 0 1.42l-6.59 6.58z'></path></svg></div></div>");
+          }
+
+        }
+
+        if (layoutInfo.favorite){
+          $('#LayoutFav'+layoutInfo.favorite+' svg path').css('fill','blue');
+        }
+
+      }
+      function SetFavorite(layoutListEntryFavId){
+        WriteDebugInfo('In SetFavorite function');
+        viewName = $('#'+layoutListEntryFavId).parent()[0].dataset.viewname;
+        layoutInfo = JSON.parse(GetCookie('DCVisualEmbedLayouts'));
+        if (layoutInfo.favorite){
+          if (layoutInfo.favorite == viewName){
+            mode = 'remove';
+          }
+          else {
+            mode = 'add';
+          }
+
+        }
+        else{
+          mode = 'add';
+        }
+
+        if (mode == 'remove'){
+          delete layoutInfo.favorite;
+          $('#'+layoutListEntryFavId+' svg path').css('fill','white');
+          event.stopPropagation();
+        }
+        else {
+          layoutInfo.favorite = viewName;
+          $('.LayoutFavIconBox svg path').css('fill','white');
+          $('#'+layoutListEntryFavId+' svg path').css('fill','blue');
+          if ($('#'+layoutListEntryFavId).parent().css('border-top-color') == 'rgb(0, 0, 255)'){
+            event.stopPropagation();
+          }
+        }
+        SetCookie('DCVisualEmbedLayouts', JSON.stringify(layoutInfo),604800);
+      }
+      function ResetVisualChoiceState(){
+        WriteDebugInfo('In ResetVisualChoiceState function');
+        $.each($('.VisualChoice'),function(index,value){
+          visualChoiceId = value.id;
+          $('#'+visualChoiceId).draggable({disabled:false});
+          $('#'+visualChoiceId).css('cursor','move');
+          $('#'+visualChoiceId+'Fade').remove();
+        });
+      }
+
+      function ChangeVisualChoiceState(visualChoiceId, mode){
+        WriteDebugInfo('In ChangeVisualChoiceState function');
+        if (mode == 'enable'){
+          $('#'+visualChoiceId).draggable({disabled:false})
+          $('#'+visualChoiceId).css('cursor','move')
+          $('#'+visualChoiceId+'Fade').remove();
+        }
+        else {
+          $('#'+visualChoiceId).draggable({disabled:true});
+          $('#'+visualChoiceId).css('cursor','not-allowed');
+          $('#'+visualChoiceId).append("<div id='" + visualChoiceId + "Fade' style='position:absolute;top:-2px;left:-2px;height:100%;width:100%;background-color:white;opacity:0.75;cursor:not-allowed;margin:0px'></div>");
+        }
+      }
+
+      function AddVisual(visualChoice){
+        WriteDebugInfo('In AddVisual function');
+        HideControls();
+        ChangeVisualChoiceState(visualChoice[0].id,'disable');
+        imgSrc = visualChoice[0].firstChild.src;
+        qsVisualId = visualChoice[0].dataset.visualid;
+        visualId = visualChoice[0].id.replace('Choice','');
+        containerOffset = $('#OuterContainer').offset();
+        visualTop = event.pageY - containerOffset.top
+        visualDim = Math.floor(($('#OuterContainer').width()*20/100))+2;
+        if (visualDim < innerBoxProps.height + controlDim*2 ) {
+          visualDim = innerBoxProps.height + controlDim*2;
+        }
+        maxTop = $('#OuterContainer').height() - visualDim;
+        maxLeft = $('#OuterContainer').width() - visualDim;
+
+        if (visualTop < 0) {
+          visualTop = 0;
+        } else if (visualTop > maxTop) {
+          visualTop = maxTop;
+        }
+        visualLeft = event.pageX - containerOffset.left;
+        if (visualLeft < 0) {
+          visualLeft = 0;
+        } else if (visualLeft > maxLeft) {
+          visualLeft = maxLeft;
+        }
+
+        $('#OuterContainer').append("<div id='" + visualId + "' style='top:" + visualTop +"px;left:" + visualLeft + "px;height:" + visualDim +"px;width:"+visualDim+"px;' class='VisualContainer' onclick='focusVisual(this.id)'><img src='"+imgSrc+"' style='height:75%;width:75%;padding-top:10%;padding-left:10%;'></img></div>");
+        objRepo.currentVisual = $('#'+visualId);
+        ConvertAnchorToPercentage();
+        $('#'+visualId).draggable({
+                                    containment: "#OuterContainer",
+                                    start:function(){
+                                      HideControls();
+                                      $('#OuterContainer').css('border-color','#219fd7');
+                                      $('.visualIframe').css('pointer-events','none');
+                                    },
+                                    drag:function(){},
+                                    stop: function(){
+                                      objRepo.currentVisual = $('#'+this.id);
+                                      ConvertAnchorToPercentage();
+                                      $('#OuterContainer').css('border-color','white');
+                                      $('.visualIframe').css('pointer-events','auto');
+                                    }
+                                  });
+
+        outerContainerProps.heightOnVisualAdd = objRepo.outerContainer.height();
+        outerContainerProps.widthOnVisualAdd = objRepo.outerContainer.width();
+        setTimeout(function(){focusVisual(visualId)},0);
+        $('#outerContainer').css('border-color','white');
+        $('#outerContainer .InitialMessage').remove();
+        GenerateVisualUrl(visualId, qsVisualId, 0, 1);
+      }
+      function DeleteVisual(){
+        WriteDebugInfo('In DeleteVisual function');
+        HideControls();
+        visualChoiceId = objRepo.currentVisual[0].id.replace('Visual','VisualChoice');
+        ChangeVisualChoiceState(visualChoiceId, 'enable');
+        objRepo.currentVisual.remove();
+      }
+      function ConvertAnchorToPercentage(){
+        WriteDebugInfo('In ConvertAnchorToPercentage function');
+        topPct = (parseInt(objRepo.currentVisual.css('top').replace('px',''))*100/objRepo.outerContainer.height()).toString()+"%";
+        leftPct = (parseInt(objRepo.currentVisual.css('left').replace('px',''))*100/objRepo.outerContainer.width()).toString()+"%"
+        heightPct = (parseInt(objRepo.currentVisual.height())*100/objRepo.outerContainer.height()).toString()+"%";
+        widthPct = (parseInt(objRepo.currentVisual.width())*100/objRepo.outerContainer.width()).toString()+"%";
+        objRepo.currentVisual.attr("style", "top:"+topPct+";left:"+leftPct+";height:"+heightPct+";width:"+widthPct+";z-index:90;");
+      }
+      function InitVisualInteraction() {
+        WriteDebugInfo('In InitVisualInteraction function');
+        objRepo.outerContainer = $( "#OuterContainer" )
+        objRepo.innerBox = $( "#innerBox" )
+        objRepo.topBox = $( "#topBox" )
+        objRepo.rightBox = $( "#rightBox" )
+        objRepo.bottomBox = $( "#bottomBox" )
+        objRepo.leftBox = $( "#leftBox" )
+        objRepo.topLeftBox = $( "#topLeftBox" )
+        objRepo.topRightBox = $( "#topRightBox" )
+        objRepo.bottomRightBox = $( "#bottomRightBox" )
+        objRepo.bottomLeftBox = $( "#bottomLeftBox" )
+        objRepo.leftControl = $( "#leftControl" )
+        objRepo.topControl = $( "#topControl" )
+        objRepo.rightControl = $( "#rightControl" )
+        objRepo.bottomControl = $( "#bottomControl" )
+        objRepo.topLeftControl = $( "#topLeftControl" )
+        objRepo.topRightControl = $( "#topRightControl" )
+        objRepo.bottomRightControl = $( "#bottomRightControl" )
+        objRepo.bottomLeftControl = $( "#bottomLeftControl" )
+        objRepo.closeControl = $( "#closeControl" )
+        // $( "#Child1" ).draggable({ containment: "#OuterContainer" });
+        // $( "#Child2" ).draggable({ containment: "#OuterContainer" });
+        objRepo.leftControl.draggable({ containment: "#leftBox",
+                        axis: "x",
+                        cursor:"ew-resize",
+                        start: function() {
+                          $('.visualIframe').css('pointer-events','none');
+                        },
+                        drag: function() {
+                          controlPos=parseInt(objRepo.leftControl.css('left').replace('px',''));
+                          if ( controlPos%updateInterval == 0) {moveLeftControl(controlPos);}
+                        },
+                        stop: function() {
+                          controlPos=parseInt(objRepo.leftControl.css('left').replace('px',''));
+                          moveLeftControl(controlPos);
+                          ConvertAnchorToPercentage();
+                          $('.visualIframe').css('pointer-events','auto');
+                        }
+                      });
+
+          objRepo.topControl.draggable({ containment: "#topBox",
+                                      axis: "y",
+                                      cursor:"ns-resize",
+                                      start: function() {
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag: function() {
+                                        controlPos=parseInt(objRepo.topControl.css('top').replace('px',''));
+                                        if ( controlPos%updateInterval == 0) {
+                                          moveTopControl(controlPos);
+                                        }
+                                      },
+                                      stop: function() {
+                                        controlPos=parseInt(objRepo.topControl.css('top').replace('px',''));
+                                        moveTopControl(controlPos);
+                                        ConvertAnchorToPercentage();
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+          objRepo.rightControl.draggable({ containment: "#rightBox",
+                                                    axis: "x",
+                                                    cursor: "ew-resize",
+                                                    start: function() {
+                                                      $('.visualIframe').css('pointer-events','none');
+                                                    },
+                                                    drag: function() {
+                                                      controlPos=parseInt(objRepo.rightControl.css('left').replace('px',''));
+                                                      if ( controlPos%updateInterval == 0) {
+                                                        moveRightControl(controlPos);
+                                                      }
+                                                    },
+                                                    stop: function() {
+                                                      controlPos=parseInt(objRepo.rightControl.css('left').replace('px',''));
+                                                      moveRightControl(controlPos);
+                                                      ConvertAnchorToPercentage();
+                                                      $('.visualIframe').css('pointer-events','auto');
+                                                    }
+                                                  });
+
+          objRepo.bottomControl.draggable({ containment: "#bottomBox",
+                                      axis: "y",
+                                      cursor: "ns-resize",
+                                      start: function() {
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag: function() {
+                                        controlPos=parseInt(objRepo.bottomControl.css('top').replace('px',''));
+                                        if ( controlPos%updateInterval == 0) {
+                                          moveBottomControl(controlPos);
+                                        }
+                                      },
+                                      stop: function() {
+                                        controlPos=parseInt(objRepo.bottomControl.css('top').replace('px',''));
+                                        moveBottomControl(controlPos);
+                                        ConvertAnchorToPercentage();
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+
+
+        objRepo.topLeftControl.draggable({
+                        containment: "#topLeftBox",
+                        cursor: "nwse-resize",
+                        start: function() {
+                          $('.visualIframe').css('pointer-events','none');
+                        },
+                        drag: function() {
+                          controlLeftPos=parseInt(objRepo.topLeftControl.css('left').replace('px',''));
+                          controlTopPos=parseInt(objRepo.topLeftControl.css('top').replace('px',''));
+                          if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                            moveTopLeftControl(controlLeftPos,controlTopPos);
+                          }
+                        },
+                        stop: function() {
+                          controlLeftPos=parseInt(objRepo.topLeftControl.css('left').replace('px',''));
+                          controlTopPos=parseInt(objRepo.topLeftControl.css('top').replace('px',''));
+                          moveTopLeftControl(controlLeftPos,controlTopPos); 
+                          ConvertAnchorToPercentage();
+                          $('.visualIframe').css('pointer-events','auto');
+                        }
+                      });
+
+        objRepo.topRightControl.draggable({ containment: "#topRightBox",
+                                      cursor: "nesw-resize",
+                                      start: function() {
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag: function() {
+                                        controlLeftPos=parseInt(objRepo.topRightControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.topRightControl.css('top').replace('px',''));
+                                        if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                                          moveTopRightControl(controlLeftPos,controlTopPos);
+                                        }
+                                      },
+                                      stop: function() {
+                                        controlLeftPos=parseInt(objRepo.topRightControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.topRightControl.css('top').replace('px',''));
+                                        moveTopRightControl(controlLeftPos,controlTopPos);
+                                        ConvertAnchorToPercentage();
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+
+        objRepo.bottomRightControl.draggable({ containment: "#bottomRightBox",
+                                      cursor: "nwse-resize",
+                                      start: function() {
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag: function() {
+                                        controlLeftPos=parseInt(objRepo.bottomRightControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.bottomRightControl.css('top').replace('px',''));
+                                        if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                                          moveBottomRightControl(controlLeftPos,controlTopPos);
+                                        }
+                                      },
+                                      stop: function() {
+                                        controlLeftPos=parseInt(objRepo.bottomRightControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.bottomRightControl.css('top').replace('px',''));
+                                        moveBottomRightControl(controlLeftPos,controlTopPos);
+                                        ConvertAnchorToPercentage();
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+
+        objRepo.bottomLeftControl.draggable({ containment: "#bottomLeftBox",
+                                      cursor: "nesw-resize",
+                                      start: function() {
+                                        $('.visualIframe').css('pointer-events','none');
+                                      },
+                                      drag: function() {
+                                        controlLeftPos=parseInt(objRepo.bottomLeftControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.bottomLeftControl.css('top').replace('px',''));
+                                        if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                                          moveBottomLeftControl(controlLeftPos,controlTopPos);
+                                        }
+                                      },
+                                      stop: function() {
+                                        controlLeftPos=parseInt(objRepo.bottomLeftControl.css('left').replace('px',''));
+                                        controlTopPos=parseInt(objRepo.bottomLeftControl.css('top').replace('px',''));
+                                        moveBottomLeftControl(controlLeftPos,controlTopPos);
+                                        ConvertAnchorToPercentage();
+                                        $('.visualIframe').css('pointer-events','auto');
+                                      }
+                                    });
+
+        outerContainerProps.heightOnVisualAdd = objRepo.outerContainer.height();
+        outerContainerProps.widthOnVisualAdd = objRepo.outerContainer.width();
+
+        outerContainerResizeObserver = new ResizeObserver(function(entries) {
+                                      objRepo.outerContainer.height(outerContainerProps.heightOnVisualAdd * objRepo.outerContainer.width() / outerContainerProps.widthOnVisualAdd);
+                                      HideControls();
+                                    });
+        outerContainerResizeObserver.observe(objRepo.outerContainer[0]);
+
+      }
+
+      function DrawDragControls(currentControlId){
+        WriteDebugInfo('In DrawDragControls function');
+
+        outerContainerProps.height = objRepo.outerContainer.height();
+        outerContainerProps.width = objRepo.outerContainer.width();
+
+        currentVisualProps.top  = objRepo.currentVisual.position().top;
+        currentVisualProps.left = objRepo.currentVisual.position().left;
+        currentVisualProps.bottom = objRepo.currentVisual.position().top + objRepo.currentVisual.height();
+        currentVisualProps.right = objRepo.currentVisual.position().left + objRepo.currentVisual.width();
+        currentVisualProps.height = objRepo.currentVisual.height();
+        currentVisualProps.width = objRepo.currentVisual.width();
+
+        innerBoxProps.top = currentVisualProps.top+(currentVisualProps.height/2)-25;
+        innerBoxProps.left = currentVisualProps.left+(currentVisualProps.width/2)-25;
+        innerBoxProps.vmid = currentVisualProps.top+(currentVisualProps.height/2);
+        innerBoxProps.hmid = currentVisualProps.left+(currentVisualProps.width/2);
+        innerBoxProps.bottom = currentVisualProps.top+(currentVisualProps.height/2)+25;
+        innerBoxProps.right = currentVisualProps.left+(currentVisualProps.width/2)+25;
+
+        objRepo.innerBox.height(50);
+        objRepo.innerBox.width(50);
+        objRepo.innerBox.css('top',innerBoxProps.top)
+        objRepo.innerBox.css('left',innerBoxProps.left)
+
+        objRepo.leftBox.css('top',innerBoxProps.top)
+        objRepo.leftBox.css('left',0)
+        objRepo.leftBox.height(innerBoxProps.height)
+        objRepo.leftBox.width(innerBoxProps.left)
+
+        objRepo.rightBox.css('top',innerBoxProps.top)
+        objRepo.rightBox.height(innerBoxProps.height)
+        objRepo.rightBox.width(outerContainerProps.width - innerBoxProps.right)
+        objRepo.rightBox.css('left',innerBoxProps.right)
+
+        objRepo.topBox.css('top',0)
+        objRepo.topBox.css('left',innerBoxProps.left)
+        objRepo.topBox.height(innerBoxProps.top)
+        objRepo.topBox.width(innerBoxProps.width)
+
+        objRepo.bottomBox.css('left',innerBoxProps.left)
+        objRepo.bottomBox.height(outerContainerProps.height - innerBoxProps.bottom)
+        objRepo.bottomBox.width(innerBoxProps.width)
+        objRepo.bottomBox.css('top',innerBoxProps.bottom)
+
+        objRepo.topLeftBox.css('top',0)
+        objRepo.topLeftBox.css('left',0)
+        objRepo.topLeftBox.height(innerBoxProps.top)
+        objRepo.topLeftBox.width(innerBoxProps.left)
+
+        objRepo.topRightBox.css('top',0)
+        objRepo.topRightBox.height(innerBoxProps.top)
+        objRepo.topRightBox.width(outerContainerProps.width - innerBoxProps.right)
+        objRepo.topRightBox.css('left',innerBoxProps.right)
+
+
+        objRepo.bottomLeftBox.css('left',0)
+        objRepo.bottomLeftBox.height(outerContainerProps.height - innerBoxProps.bottom)
+        objRepo.bottomLeftBox.width(innerBoxProps.left)
+        objRepo.bottomLeftBox.css('top', innerBoxProps.bottom)
+
+        objRepo.bottomRightBox.height(outerContainerProps.height - innerBoxProps.bottom)
+        objRepo.bottomRightBox.width(outerContainerProps.width - innerBoxProps.right)
+        objRepo.bottomRightBox.css('top',innerBoxProps.bottom)
+        objRepo.bottomRightBox.css('left',innerBoxProps.right)
+
+        if (currentControlId != 'leftControl'){
+          objRepo.leftControl.css('top',innerBoxProps.vmid - controlDim/2)
+          objRepo.leftControl.css('left',currentVisualProps.left)
+        }
+
+        if (currentControlId != 'topControl'){
+          objRepo.topControl.css('top',currentVisualProps.top)
+          objRepo.topControl.css('left',innerBoxProps.hmid - controlDim/2)
+        }
+        if (currentControlId != 'rightControl'){
+          objRepo.rightControl.css('top',innerBoxProps.vmid - controlDim/2)
+          objRepo.rightControl.css('left',currentVisualProps.right-controlDim)
+        }
+        if (currentControlId != 'bottomControl'){
+          objRepo.bottomControl.css('top',currentVisualProps.bottom-controlDim)
+          objRepo.bottomControl.css('left',innerBoxProps.hmid - controlDim/2)
+        }
+        if (currentControlId != 'topLeftControl'){
+          objRepo.topLeftControl.css('top',currentVisualProps.top)
+          objRepo.topLeftControl.css('left',currentVisualProps.left)
+        }
+
+        if (currentControlId != 'topRightControl'){
+          objRepo.topRightControl.css('top',currentVisualProps.top)
+          objRepo.topRightControl.css('left',currentVisualProps.right - controlDim)
+        }
+
+        if (currentControlId != 'bottomRightControl'){
+          objRepo.bottomRightControl.css('top',currentVisualProps.bottom - controlDim)
+          objRepo.bottomRightControl.css('left',currentVisualProps.right - controlDim)
+        }
+        if (currentControlId != 'bottomLeftControl'){
+          objRepo.bottomLeftControl.css('top',currentVisualProps.bottom - controlDim)
+          objRepo.bottomLeftControl.css('left',currentVisualProps.left)
+        }
+
+        objRepo.closeControl.css('top',currentVisualProps.top + controlDim*2)
+        objRepo.closeControl.css('left',currentVisualProps.right - controlDim*2)
+
+
+      }
+
+      function focusVisual(currentVisualId){
+        WriteDebugInfo('In focusVisual function');
+        objRepo.currentVisual = $('#'+currentVisualId);
+        objRepo.currentVisual.css('z-index','90');
+        $('.VisualContainer:not(#' + currentVisualId + ')').css('z-index','10');
+        if (objRepo.currentVisual.height() > innerBoxProps.height && objRepo.currentVisual.width() > innerBoxProps.width) {
+          DrawDragControls();
+        }
+        if (event){
+          event.stopPropagation();
+        }
+
+      }
+
+      function HideControls(){
+        WriteDebugInfo('In HideControls function');
+        $('.DragControl').css('left','-20');
+      }
+
+      function suppressClick(){
+        WriteDebugInfo('In suppressClick function');
+        event.stopPropagation();
+      }
+      function moveLeftControl(controlPos){
+        objRepo.currentVisual.css('left',controlPos);
+        objRepo.currentVisual.width(currentVisualProps.right-controlPos);
+        DrawDragControls('leftControl');
+      }
+      function moveTopControl(controlPos){
+        objRepo.currentVisual.css('top',controlPos);
+        objRepo.currentVisual.height(currentVisualProps.bottom-controlPos);
+        DrawDragControls('topControl');
+      }
+      function moveRightControl(controlPos){
+        if (controlPos >= outerContainerProps.width-controlDim){
+          controlPos = outerContainerProps.width-controlDim;
+        }
+        objRepo.currentVisual.width(controlPos - currentVisualProps.left + controlDim);
+        DrawDragControls('rightControl');
+      }
+      function moveBottomControl(controlPos){
+        if (controlPos >= outerContainerProps.height-controlDim){
+          controlPos = outerContainerProps.height-controlDim;
+        }
+        objRepo.currentVisual.height(controlPos - currentVisualProps.top + controlDim);
+        DrawDragControls('bottomControl');
+      }
+      function moveTopLeftControl(controlLeftPos, controlTopPos){
+        objRepo.currentVisual.css('left',controlLeftPos);
+        objRepo.currentVisual.css('top',controlTopPos);
+        objRepo.currentVisual.width(currentVisualProps.right-controlLeftPos);
+        objRepo.currentVisual.height(currentVisualProps.bottom-controlTopPos);
+        DrawDragControls('topLeftControl');
+      }
+
+      function moveTopRightControl(controlLeftPos, controlTopPos){
+        if (controlLeftPos >= outerContainerProps.width-controlDim){
+          controlLeftPos = outerContainerProps.width-controlDim;
+        }
+        objRepo.currentVisual.width(controlLeftPos + controlDim - currentVisualProps.left);
+        objRepo.currentVisual.css('top',controlTopPos);
+        objRepo.currentVisual.height(currentVisualProps.bottom-controlTopPos);
+        DrawDragControls('topRightControl');
+      }
+      function moveBottomRightControl(controlLeftPos, controlTopPos){
+        if (controlLeftPos >= outerContainerProps.width-controlDim){
+          controlLeftPos = outerContainerProps.width-controlDim;
+        }
+        if (controlTopPos >= outerContainerProps.height-controlDim){
+          controlTopPos = outerContainerProps.height-controlDim;
+        }
+        objRepo.currentVisual.width(controlLeftPos + controlDim - currentVisualProps.left);
+        objRepo.currentVisual.height(controlTopPos + controlDim - currentVisualProps.top);
+        DrawDragControls('bottomRightControl');
+      }
+      function moveBottomLeftControl(controlLeftPos, controlTopPos){
+        if (controlTopPos >= outerContainerProps.height-controlDim){
+          controlTopPos = outerContainerProps.height-controlDim;
+        }
+        objRepo.currentVisual.css('left',controlLeftPos);
+        objRepo.currentVisual.width(currentVisualProps.right-controlLeftPos);
+        objRepo.currentVisual.height(controlTopPos + controlDim - currentVisualProps.top);
+        DrawDragControls('bottomLeftControl');
+      }
+      
+      function OldGenerateVisualUrl(embedDiv, qsVisualId ) {
+        WriteDebugInfo('In GenerateVisualUrl function');
+
+        const parameters = {
+            token: awsData.token,
+            dashboardId: awsData.dashboardId,
+            sheetId: awsData.sheetId,
+            visualId: qsVisualId,
+            timestamp: new Date().getTime()  //Timestamp added just to ensure that browsers don't use cached response.
+        };
+  
+        const myQueryString = $.param(parameters);
+   
+        $.ajax({
+              url: awsData.apiGatewayUrl + '?mode=generateVisualUrl&' + myQueryString,
+              contentType: "text/plain",
+              dataType: 'json',
+              success: function(result){
+                  WriteDebugInfo(result);
+                  
+                  embedVisual(embedDiv, result.EmbedUrl);
+              },
+              error: function(err){
+                  console.log('Error on making API gateway call to retrieve visual embed url.');
+                  console.log(err);
+                }
+              });
+
+      }
+      
+      //DemoCentral already has embedded sessions going. Hence, piggy backing on them.
+      //So, if you are taking a look at this code to see how you can implement visual embedding, ignore the following functions.
+      //You will instead be making call to generate-embed-url-for-registered-user or generate-embed-url-for-anonymous-user with a new experience configuration for visual level embedding.
+      function QueueVisualLoad(queueId, embedDiv, qsVisualId){
+        awsData['visualQueue'+queueId.toString()].push(function(){GenerateVisualUrl(embedDiv, qsVisualId, queueId, 1 )});
+      }
+      
+      function GenerateVisualUrl(embedDiv, qsVisualId, queueId, retryCount ) {
+        WriteDebugInfo('In GenerateVisualUrl function' + retryCount.toString());
+        if (awsData.reuseSession == 'yes') {
+          if (queueId ==0 ){
+            sessionId = 1;
+          }
+          else {
+            sessionId = queueId;
+          }
+          
+          sessionEmbedId = awsData['sessionEmbedId'+sessionId.toString()];
+          embedVisual(embedDiv,'https://us-east-1.quicksight.aws.amazon.com/embed/' + sessionEmbedId + '/dashboards/'+awsData.dashboardId+'/sheets/'+awsData.sheetId+'/visuals/'+qsVisualId+'?printEnabled=false&punyCodeEmbedOrigin='+awsData.originUrl, queueId);
+        }
+        else {
+          const parameters = {
+              token: awsData.dctoken,
+              dashboardId: awsData.dashboardId,
+              sheetId: awsData.sheetId,
+              visualId: qsVisualId,
+              timestamp: new Date().getTime()  //Timestamp added just to ensure that browsers don't use cached response.
+          };
+    
+          const myQueryString = $.param(parameters);
+     
+          $.ajax({
+                url: awsData.apiGatewayUrl + '?mode=generateVisualUrl&' + myQueryString,
+                contentType: "text/plain",
+                dataType: 'json',
+                success: function(result){
+                    WriteDebugInfo(result);
+                    if (result.ApiStatus == 'NO_ERROR') {
+                        embedVisual(embedDiv,result.EmbedUrl, queueId);
+                    }
+                    else if (awsData.sessionActive && (result.ApiStatus == 'INVALID_TOKEN' || result.ApiStatus == 'NONEXISTENT_TOKEN')){
+                      console.log('Ouch - We could not find your session. Please try launching in a fresh browser instance');
+                    }
+                    else if (awsData.sessionActive && result.ApiStatus == 'MAX_USER_ERROR'){
+                      console.log('Ouch - While QuickSight has infinite scale, DemoCentral is locked by self imposed threshold to stay frugal. Please try again after an hour.');
+                    }
+                    
+                },
+                error: function(err){
+                    console.log('Error on making API gateway call to retrieve dynamic visual embed url.');
+                    console.log(err);
+                  }
+                });
+
+        }
+      }
+      
+      function embedVisual(embedDiv, embedUrl, queueId) {
+        WriteDebugInfo('In embedVisual function');
+        var params = {
+                url: embedUrl,
+                container: "#"+embedDiv,
+                className:"visualIframe",
+                scrolling: "no",
+                height:'100%',
+                width:'100%'
+        };
+        
+        $('#'+embedDiv).empty();
+        $('#'+embedDiv).append("<iframe class='visualIframe' src='"+embedUrl+"' onload='TriggerNextVisualLoad("+queueId+")'></iframe>");
+
+      }
+      
+      function TriggerNextVisualLoad(queueId){
+        if (queueId != 0){
+          setTimeout(function(){
+            if (awsData['visualQueue'+queueId.toString()].length > 0){
+              awsData['visualQueue'+queueId.toString()].shift()();
+            }
+            else{
+              setTimeout(function(){
+                  $('#LayoutContainer').css('cursor','auto');
+                  $('#LayoutContainer').removeAttr('title');
+                  $('.LayoutListEntry').css('pointer-events','auto');
+                },
+                1000);
+            }
+          },2000);
+        }
+        
+      }
+      //End of custom section.
+    </script>
+  </head>
+  <body>
+
+    <div id="LayoutSaveContainer">
+      <textarea id="ViewName" rows="1" cols="40">View1</textarea>
+      <button id="SaveLayoutButton" type="button" onclick="SaveLayout()" >Save Layout</button>
+    </div>
+    <div id="LayoutContainer">
+
+      <div id="LayoutList">
+      </div>
+
+    </div>
+
+    <div id="VisualBoundary">
+      <div id="VisualChoiceContainer">
+          <div id="VisualChoice1" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_aed0cf65-e609-4fec-a65a-f50fe4ccf0b3" title="Sales Trend over Time"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/LINE_CHART.svg"></img><h5>Sales Trend</h5></div><!--
+          --><div id="VisualChoice2" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_53954a3f-9010-458b-be1a-67a08795dc1e" title="Segment Sales by Region"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/STACKED_BAR_CHART_HORIZONTAL.svg"></img><h5>Sgmnt Sales</h5></div><!--
+          --><div id="VisualChoice3" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_2af1d0bb-3cbb-4c88-a31e-ad7903948599" title="Product Contribution"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/DONUT.svg"></img><h5>Prod Contrib</h5></div><!--
+          --><div id="VisualChoice4" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_0dc640dd-382a-479d-9e71-5f4d082c8823" title="YoY Sales Comparison"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/KPI.svg"></img><h5>YoY Sales</h5></div><!--
+          --><div id="VisualChoice5" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_50ca3f58-95d0-44a7-9e2f-f43d8be54f77" title="Monthly Sales Details"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/TABLE.svg"></img><h5>Month Sales</h5></div><!--
+          --><div id="VisualChoice6" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_28fabe61-f19a-4eaa-a149-1f0efe7b569f" title="Industry Sales by Region"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/STACKED_BAR_CHART_VERTICAL.svg"></img><h5>Indstry Sales</h5></div><!--
+          --><div id="VisualChoice7" class="VisualChoice" data-visualid="682876fd-6056-42bb-9487-f8136a9b275b_b047b4a4-cbb6-4122-ae23-dafc28c5ddc6" title="Industry Segment Analysis"><img src="https://democentral.learnquicksight.online/v2/other/VisualEmbed/HEAT_MAP.svg"></img><h5>Indstry Slice</h5></div><!--
+          -->
+      </div>
+
+      <div id="OuterContainer" onclick="HideControls()">
+
+        <div id="innerBox" class="DragControlBoundary"></div>
+        <div id="leftBox" class="DragControlBoundary"></div>
+
+        <div id="rightBox" class="DragControlBoundary"></div>
+        <div id="topBox" class="DragControlBoundary"></div>
+        <div id="bottomBox" class="DragControlBoundary"></div>
+        <div id="topLeftBox" class="DragControlBoundary"></div>
+        <div id="topRightBox" class="DragControlBoundary"></div>
+        <div id="bottomLeftBox" class="DragControlBoundary"></div>
+        <div id="bottomRightBox" class="DragControlBoundary"></div>
+
+        <div id="leftControl" class="DragControl" onclick="suppressClick()" style="cursor:ew-resize;"></div>
+        <div id="topControl" class="DragControl" onclick="suppressClick()" style="cursor:ns-resize;"></div>
+        <div id="rightControl" class="DragControl" onclick="suppressClick()" style="cursor:ew-resize;"></div>
+        <div id="bottomControl" class="DragControl" onclick="suppressClick()" style="cursor:ns-resize;"></div>
+        <div id="topLeftControl" class="DragControl" onclick="suppressClick()" style="cursor:nwse-resize;"></div>
+        <div id="topRightControl" class="DragControl" onclick="suppressClick()" style="cursor:nesw-resize;"></div>
+        <div id="bottomRightControl" class="DragControl" onclick="suppressClick()" style="cursor:nwse-resize;"></div>
+        <div id="bottomLeftControl" class="DragControl" onclick="suppressClick()" style="cursor:nesw-resize;"></div>
+        <svg id="closeControl" class="DragControl" viewBox="0 0 24 24" style="height:10px;width:10px;border:solid red 1px;" onclick="DeleteVisual()"><path d="M20 18.46a1 1 0 0 1-1.41 1.41L12 13.29l-6.59 6.58A1 1 0 0 1 4 18.46l6.59-6.59L4 5.29a1 1 0 0 1 0-1.42 1 1 0 0 1 1.41 0L12 10.46l6.59-6.59a1 1 0 0 1 1.41 0 1 1 0 0 1 0 1.42l-6.59 6.58z"></path></svg>
+
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Meet Project</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: #f0f2ff;
+        }
+        
+        header {
+            padding: 10px 20px;
+            background-color: #fff;
+            border-bottom: 1px solid #e1e4e8;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 36px;
+            color: #333;
+        }
+        
+        .visual-palette {
+            display: flex;
+            flex-wrap: nowrap;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            background-color: #eef0ff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+        }
+        
+        .visual-item {
+            width: 130px;
+            height: 75px;
+            background-color: #fff;
+            border-radius: 6px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e5e7f9;
+        }
+        
+        .visual-item:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        
+        .visual-item span {
+            font-size: 12px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            position: absolute;
+            bottom: 8px;
+            left: 0;
+            right: 0;
+        }
+        
+        .visual-item .icon {
+            margin-bottom: 20px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Specific styling for each visual icon */
+        .visual-item[data-visual-id="attendees-type"] .icon {
+            color: #3366CC;
+        }
+        
+        .visual-item[data-visual-id="sgmnt-sales"] .icon {
+            color: #445569;
+        }
+        
+        .visual-item[data-visual-id="prod-contrib"] .icon {
+            color: #555;
+        }
+        
+        .visual-item[data-visual-id="yoy-sales"] .icon {
+            color: #66AD66;
+        }
+        
+        .visual-item[data-visual-id="month-sales"] .icon {
+            color: #7986CB;
+        }
+        
+        .visual-item[data-visual-id="indstry-sales"] .icon {
+            color: #6B7280;
+        }
+        
+        .workspace {
+            min-height: 600px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+            background-color: #fff;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.03);
+        }
+        
+        .workspace-placeholder {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #aaa;
+            font-size: 18px;
+            text-align: center;
+            width: 80%;
+        }
+        
+        .workspace-visual {
+            position: absolute;
+            width: 500px; /* Increased default width */
+            height: 400px; /* Increased default height */
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow: hidden;
+            z-index: 10;
+            resize: both;
+        }
+        
+        .workspace-visual .visual-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 10px;
+            height: 35px;
+        }
+        
+        .workspace-visual .visual-title {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .workspace-visual .visual-content {
+            height: calc(100% - 40px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            color: #666;
+            text-align: center;
+            font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resize-handle {
+            width: 12px;
+            height: 12px;
+            background-color: #ddd;
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            cursor: se-resize;
+            border-radius: 2px;
+        }
+        
+        .ui-resizable-helper {
+            border: 2px dotted #ccc;
+        }
+        
+        .visual-controls {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .visual-controls button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .visual-controls button:hover {
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        
+        /* Iframe container for embedded visuals */
+        .iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .iframe-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        /* Size warning message */
+        .size-warning {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 13px;
+            color: #555;
+            text-align: center;
+            display: none;
+            z-index: 10;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+        
+        /* Line chart icon */
+        .icon-line-chart {
+            display: inline-block;
+            position: relative;
+            width: 24px;
+            height: 24px;
+        }
+        
+        .icon-line-chart::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 2px;
+            width: 20px;
+            height: 12px;
+            border-bottom: 2px solid;
+            border-left: 2px solid;
+        }
+        
+        .icon-line-chart::after {
+            content: "";
+            position: absolute;
+            width: 16px;
+            height: 6px;
+            top: 6px;
+            left: 4px;
+            background: transparent;
+            border-bottom: 2px solid;
+            transform: rotate(30deg);
+        }
+        
+        /* Bar chart icon */
+        .icon-bar-chart {
+            display: flex;
+            align-items: flex-end;
+            width: 24px;
+            height: 24px;
+            justify-content: space-between;
+        }
+        
+        .icon-bar-chart span {
+            width: 4px;
+            background-color: currentColor;
+            position: static;
+            margin: 0;
+            font-size: inherit;
+            font-weight: normal;
+        }
+        
+        .icon-bar-chart span:nth-child(1) {
+            height: 10px;
+        }
+        
+        .icon-bar-chart span:nth-child(2) {
+            height: 16px;
+        }
+        
+        .icon-bar-chart span:nth-child(3) {
+            height: 8px;
+        }
+        
+        .icon-bar-chart span:nth-child(4) {
+            height: 14px;
+        }
+        
+        /* Pie chart icon */
+        .icon-pie-chart {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: conic-gradient(currentColor 0% 70%, #eee 70% 100%);
+            position: relative;
+            border: 1px solid currentColor;
+        }
+        
+        /* Arrow chart icon */
+        .icon-arrow-chart {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+        
+        .icon-arrow-chart::before {
+            content: "";
+            position: absolute;
+            left: 4px;
+            top: 12px;
+            width: 16px;
+            height: 2px;
+            background-color: currentColor;
+        }
+        
+        .icon-arrow-chart::after {
+            content: "";
+            position: absolute;
+            right: 4px;
+            top: 8px;
+            width: 8px;
+            height: 8px;
+            border-top: 2px solid currentColor;
+            border-right: 2px solid currentColor;
+            transform: rotate(45deg);
+        }
+        
+        /* Calendar icon */
+        .icon-calendar {
+            width: 22px;
+            height: 20px;
+            border: 2px solid currentColor;
+            border-radius: 3px;
+            position: relative;
+        }
+        
+        .icon-calendar::before {
+            content: "";
+            position: absolute;
+            top: -5px;
+            left: 3px;
+            width: 2px;
+            height: 5px;
+            background-color: currentColor;
+            box-shadow: 12px 0 0 currentColor;
+        }
+        
+        .icon-calendar::after {
+            content: "";
+            position: absolute;
+            top: 5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: currentColor;
+        }
+        
+        /* Bar graph icon */
+        .icon-bar-graph {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .icon-bar-graph span {
+            height: 3px;
+            background-color: currentColor;
+            position: static;
+            margin: 0;
+            font-size: inherit;
+            font-weight: normal;
+        }
+        
+        .icon-bar-graph span:nth-child(1) {
+            width: 100%;
+        }
+        
+        .icon-bar-graph span:nth-child(2) {
+            width: 75%;
+        }
+        
+        .icon-bar-graph span:nth-child(3) {
+            width: 90%;
+        }
+        
+        .icon-bar-graph span:nth-child(4) {
+            width: 60%;
+        }
+        
+        /* Loading indicator */
+        .loading-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Error message styling */
+        .error-message {
+            color: #e74c3c;
+            background-color: #fdeaea;
+            border: 1px solid #f5c6cb;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-right">
+            <div class="time-left"></div>
+        </div>
+    </header>
+
+    <main>
+        <h1>Annual Meet Project</h1>
+        
+        <div class="visual-palette" id="visual-palette">
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_17fadeb6-8c7f-4c6f-a46f-e2bf7e816102">
+                <div class="icon">
+                    <div class="icon-line-chart"></div>
+                </div>
+                <span>Attendees Type by Member Count</span>
+            </div>
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_5a5c367d-ed21-43a6-a54b-c78d1cacd734">
+                <div class="icon">
+                    <div class="icon-bar-graph">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <span>Custom Report Download</span>
+            </div>
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_6ac2f623-c557-4199-bfd0-46554a8d0be5">
+                <div class="icon">
+                    <div class="icon-pie-chart"></div>
+                </div>
+                <span>Registration Metrics</span>
+            </div>
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_9cd5d900-d013-4b8d-8f24-4a9d532f1b0a">
+                <div class="icon">
+                    <div class="icon-arrow-chart"></div>
+                </div>
+                <span>Voting Metrics</span>
+            </div>
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_86cb2f23-0156-4a62-b7dd-112c59cfc11d">
+                <div class="icon">
+                    <div class="icon-calendar"></div>
+                </div>
+                <span>Member Information Overview</span>
+            </div>
+            <div class="visual-item" data-visual-id="513504a7-784c-477a-b329-5e2ee5e7aadc_355227e3-4f7b-4b53-b294-4fbf4df42c9b">
+                <div class="icon">
+                    <div class="icon-bar-chart">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <span>Attendees by Location</span>
+            </div>
+        </div>
+        
+        <div class="workspace" id="workspace">
+            <div class="workspace-placeholder">Drag visuals from top panel to create your own info space.<br><br>Note: If you see only an "i" icon in a visual, resize it to make it larger.</div>
+        </div>
+    </main>
+
+    <script>
+        $(document).ready(function() {
+            let visualCounter = 0;
+            
+            // Make visual items draggable
+            $(".visual-item").draggable({
+                helper: "clone",
+                appendTo: "body",
+                zIndex: 1000,
+                start: function(event, ui) {
+                    $(ui.helper).css({
+                        'width': '130px',
+                        'height': '75px'
+                    });
+                }
+            });
+            
+            // Make workspace droppable
+            $("#workspace").droppable({
+                accept: ".visual-item",
+                drop: function(event, ui) {
+                    // Remove placeholder when first item is dropped
+                    $(".workspace-placeholder").hide();
+                    
+                    // Get position relative to the workspace
+                    const workspaceOffset = $(this).offset();
+                    const relX = ui.offset.left - workspaceOffset.left;
+                    const relY = ui.offset.top - workspaceOffset.top;
+                    
+                    // Get visual info
+                    const visualId = $(ui.draggable).data("visual-id");
+                    const visualTitle = $(ui.draggable).find("span").text();
+                    
+                    // Create new visual in workspace
+                    addVisualToWorkspace(visualId, visualTitle, relX, relY);
+                }
+            });
+            
+            function addVisualToWorkspace(visualId, visualTitle, x, y) {
+                const uniqueId = `visual-${visualId.replace(/[^a-zA-Z0-9]/g, '-')}-${visualCounter++}`;
+                
+                // Create visual element
+                const visualElement = $(`
+                    <div id="${uniqueId}" class="workspace-visual" style="left: ${x}px; top: ${y}px;">
+                        <div class="visual-header">
+                            <div class="visual-title">${visualTitle}</div>
+                            <div class="visual-controls">
+                                <button class="close-visual">×</button>
+                            </div>
+                        </div>
+                        <div class="visual-content">
+                            <div class="loading-indicator">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="size-warning">
+                                If you see only an "i" icon, please resize this visual to make it larger
+                            </div>
+                            <div class="iframe-wrapper" id="iframe-wrapper-${uniqueId}"></div>
+                        </div>
+                        <div class="resize-handle"></div>
+                    </div>
+                `);
+                
+                // Add to workspace
+                $("#workspace").append(visualElement);
+                
+                // Make visual draggable within workspace
+                visualElement.draggable({
+                    containment: "parent",
+                    handle: ".visual-header",
+                    stack: ".workspace-visual"
+                });
+                
+                // Make visual resizable
+                visualElement.resizable({
+                    handles: {
+                        se: ".resize-handle"
+                    },
+                    minHeight: 300,
+                    minWidth: 400,
+                    maxHeight: 800,
+                    maxWidth: 1000,
+                    containment: "parent",
+                    resize: function(event, ui) {
+                        resizeEmbeddedVisual(uniqueId);
+                    }
+                });
+                
+                // Close button functionality
+                visualElement.find(".close-visual").on("click", function() {
+                    visualElement.remove();
+                    
+                    // Show placeholder if no visuals left
+                    if ($(".workspace-visual").length === 0) {
+                        $(".workspace-placeholder").show();
+                    }
+                });
+                
+                // Load embedded QuickSight visual
+                loadEmbeddedVisual(uniqueId, visualId);
+            }
+            
+            function loadEmbeddedVisual(containerId, visualId) {
+                const container = $(`#${containerId}`);
+                const iframeWrapper = $(`#iframe-wrapper-${containerId}`);
+                
+                // Show size warning for a brief period
+                container.find('.size-warning').fadeIn(300).delay(3000).fadeOut(500);
+                
+                // Make an AJAX call to get the embed URL
+                $.ajax({
+                    url: '/get-embed-url',
+                    data: { 
+                        visual_id: visualId 
+                    },
+                    success: function(response) {
+                        console.log("Response from server:", response);
+                        
+                        if (response && response.EmbedUrl) {
+                            // Create iframe for QuickSight
+                            const iframe = $('<iframe>')
+                                .attr({
+                                    'id': `quicksight-iframe-${containerId}`,
+                                    'width': '100%',
+                                    'height': '100%',
+                                    'frameborder': '0',
+                                    'scrolling': 'no',
+                                    'allowfullscreen': true,
+                                    'src': response.EmbedUrl
+                                });
+                            
+                            // Add iframe to container
+                            iframeWrapper.empty().append(iframe);
+                            
+                            // Hide loading indicator
+                            container.find('.loading-indicator').hide();
+                            
+                            // For fallback/demo mode - if the iframe doesn't load properly
+                            iframe.on('error', function() {
+                                showFallbackContent(iframeWrapper, visualId, container);
+                            });
+                            
+                            // Check iframe loading after a timeout
+                            setTimeout(function() {
+                                // If iframe content not accessible, show fallback
+                                try {
+                                    const iframeDoc = iframe[0].contentDocument || iframe[0].contentWindow.document;
+                                    if (!iframeDoc || iframeDoc.body.innerHTML === '') {
+                                        showFallbackContent(iframeWrapper, visualId, container);
+                                    }
+                                } catch (e) {
+                                    // If we can't access iframe content due to CORS, it might be working correctly
+                                    console.log("Cannot access iframe content due to security restrictions - this may be normal");
+                                }
+                            }, 5000);
+                        } else if (response.error) {
+                            // Display specific error from backend
+                            showError(iframeWrapper, `Error loading visual: ${response.error}`, container);
+                        } else {
+                            // Generic error for unexpected response format
+                            showError(iframeWrapper, "Error: Invalid server response format", container);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching embed URL:', error);
+                        showError(iframeWrapper, `Failed to load visual: ${error}`, container);
+                    }
+                });
+            }
+            
+            function showError(wrapper, message, container) {
+                wrapper.html(`<div class="error-message">${message}</div>`);
+                container.find('.loading-indicator').hide();
+            }
+            
+            function showFallbackContent(wrapper, visualId, container) {
+                // Create a fallback/demo visualization
+                const fallbackContent = `
+                    <div style="text-align: center; padding: 20px;">
+                        <svg width="100%" height="200px" viewBox="0 0 400 200">
+                            <rect x="20" y="20" width="360" height="160" fill="#e6f0ff" stroke="#99c2ff" stroke-width="1"></rect>
+                            <text x="200" y="100" text-anchor="middle" dominant-baseline="middle" font-family="Arial" font-size="14">
+                                QuickSight Visual (ID: ${visualId})
+                            </text>
+                        </svg>
+                        <div style="margin-top: 15px; color: #3366cc; font-weight: bold;">
+                            Demo Visualization
+                        </div>
+                        <div style="margin-top: 8px; color: #666; font-size: 13px;">
+                            This is a placeholder. In production, QuickSight visuals would appear here.
+                        </div>
+                    </div>
+                `;
+                
+                wrapper.html(fallbackContent);
+                container.find('.loading-indicator').hide();
+            }
+            
+            function resizeEmbeddedVisual(containerId) {
+                const container = $(`#${containerId}`);
+                const iframe = container.find('iframe');
+                
+                if (iframe.length) {
+                    const width = container.width();
+                    const height = container.height() - container.find('.visual-header').outerHeight();
+                    
+                    // Try to communicate resize to the iframe content
+                    try {
+                        const iframeWindow = iframe[0].contentWindow;
+                        if (iframeWindow) {
+                            iframeWindow.postMessage({
+                                eventName: 'resize',
+                                width: width,
+                                height: height
+                            }, '*');
+                        }
+                    } catch (e) {
+                        console.error('Error resizing iframe:', e);
+                    }
+                }
+            }
+            
+            // Listen for messages from embedded visuals
+            window.addEventListener('message', function(event) {
+                if (event.data && event.data.eventName === 'CONTENT_LOADED') {
+                    console.log('Content loaded:', event.data);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
