@@ -529,7 +529,9 @@
             <div class="workspace-placeholder">Drag visuals from top panel to create your own info space.<br><br>Note: If you see only an "i" icon in a visual, resize it to make it larger.</div>
         </div>
     </main>
-
+    <script src="jquery-3.6.0.js"></script>
+    <script src="jquery-ui.js"></script>
+    <script>
     <script>
         $(document).ready(function() {
             let visualCounter = 0;
@@ -759,6 +761,482 @@
                 }
             });
         });
-    </script>
+
+// This ResizeObserver maintains the container's aspect ratio when the window is resized
+outerContainerResizeObserver = new ResizeObserver(function(entries) {
+    objRepo.outerContainer.height(outerContainerProps.heightOnVisualAdd * objRepo.outerContainer.width() / outerContainerProps.widthOnVisualAdd);
+    HideControls();
+});
+outerContainerResizeObserver.observe(objRepo.outerContainer[0]);
+
+// Converts position and size to percentages to make visuals responsive
+function ConvertAnchorToPercentage(){
+    WriteDebugInfo('In ConvertAnchorToPercentage function');
+    topPct = (parseInt(objRepo.currentVisual.css('top').replace('px',''))*100/objRepo.outerContainer.height()).toString()+"%";
+    leftPct = (parseInt(objRepo.currentVisual.css('left').replace('px',''))*100/objRepo.outerContainer.width()).toString()+"%"
+    heightPct = (parseInt(objRepo.currentVisual.height())*100/objRepo.outerContainer.height()).toString()+"%";
+    widthPct = (parseInt(objRepo.currentVisual.width())*100/objRepo.outerContainer.width()).toString()+"%";
+    objRepo.currentVisual.attr("style", "top:"+topPct+";left:"+leftPct+";height:"+heightPct+";width:"+widthPct+";z-index:90;");
+}
+
+
+
+// Setup edge and corner drag controls for visual resizing
+function InitVisualInteraction() {
+    WriteDebugInfo('In InitVisualInteraction function');
+    objRepo.outerContainer = $( "#OuterContainer" )
+    objRepo.innerBox = $( "#innerBox" )
+    objRepo.topBox = $( "#topBox" )
+    objRepo.rightBox = $( "#rightBox" )
+    objRepo.bottomBox = $( "#bottomBox" )
+    objRepo.leftBox = $( "#leftBox" )
+    objRepo.topLeftBox = $( "#topLeftBox" )
+    objRepo.topRightBox = $( "#topRightBox" )
+    objRepo.bottomRightBox = $( "#bottomRightBox" )
+    objRepo.bottomLeftBox = $( "#bottomLeftBox" )
+    objRepo.leftControl = $( "#leftControl" )
+    objRepo.topControl = $( "#topControl" )
+    objRepo.rightControl = $( "#rightControl" )
+    objRepo.bottomControl = $( "#bottomControl" )
+    objRepo.topLeftControl = $( "#topLeftControl" )
+    objRepo.topRightControl = $( "#topRightControl" )
+    objRepo.bottomRightControl = $( "#bottomRightControl" )
+    objRepo.bottomLeftControl = $( "#bottomLeftControl" )
+    objRepo.closeControl = $( "#closeControl" )
+    
+    // Left edge control
+    objRepo.leftControl.draggable({ 
+        containment: "#leftBox",
+        axis: "x",
+        cursor:"ew-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlPos=parseInt(objRepo.leftControl.css('left').replace('px',''));
+            if ( controlPos%updateInterval == 0) {moveLeftControl(controlPos);}
+        },
+        stop: function() {
+            controlPos=parseInt(objRepo.leftControl.css('left').replace('px',''));
+            moveLeftControl(controlPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Top edge control
+    objRepo.topControl.draggable({ 
+        containment: "#topBox",
+        axis: "y",
+        cursor:"ns-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlPos=parseInt(objRepo.topControl.css('top').replace('px',''));
+            if ( controlPos%updateInterval == 0) {
+                moveTopControl(controlPos);
+            }
+        },
+        stop: function() {
+            controlPos=parseInt(objRepo.topControl.css('top').replace('px',''));
+            moveTopControl(controlPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+    
+    // Right edge control
+    objRepo.rightControl.draggable({ 
+        containment: "#rightBox",
+        axis: "x",
+        cursor: "ew-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlPos=parseInt(objRepo.rightControl.css('left').replace('px',''));
+            if ( controlPos%updateInterval == 0) {
+                moveRightControl(controlPos);
+            }
+        },
+        stop: function() {
+            controlPos=parseInt(objRepo.rightControl.css('left').replace('px',''));
+            moveRightControl(controlPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Bottom edge control
+    objRepo.bottomControl.draggable({ 
+        containment: "#bottomBox",
+        axis: "y",
+        cursor: "ns-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlPos=parseInt(objRepo.bottomControl.css('top').replace('px',''));
+            if ( controlPos%updateInterval == 0) {
+                moveBottomControl(controlPos);
+            }
+        },
+        stop: function() {
+            controlPos=parseInt(objRepo.bottomControl.css('top').replace('px',''));
+            moveBottomControl(controlPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Top-left corner control
+    objRepo.topLeftControl.draggable({
+        containment: "#topLeftBox",
+        cursor: "nwse-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlLeftPos=parseInt(objRepo.topLeftControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.topLeftControl.css('top').replace('px',''));
+            if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                moveTopLeftControl(controlLeftPos,controlTopPos);
+            }
+        },
+        stop: function() {
+            controlLeftPos=parseInt(objRepo.topLeftControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.topLeftControl.css('top').replace('px',''));
+            moveTopLeftControl(controlLeftPos,controlTopPos); 
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Top-right corner control
+    objRepo.topRightControl.draggable({ 
+        containment: "#topRightBox",
+        cursor: "nesw-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlLeftPos=parseInt(objRepo.topRightControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.topRightControl.css('top').replace('px',''));
+            if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                moveTopRightControl(controlLeftPos,controlTopPos);
+            }
+        },
+        stop: function() {
+            controlLeftPos=parseInt(objRepo.topRightControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.topRightControl.css('top').replace('px',''));
+            moveTopRightControl(controlLeftPos,controlTopPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Bottom-right corner control
+    objRepo.bottomRightControl.draggable({ 
+        containment: "#bottomRightBox",
+        cursor: "nwse-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlLeftPos=parseInt(objRepo.bottomRightControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.bottomRightControl.css('top').replace('px',''));
+            if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                moveBottomRightControl(controlLeftPos,controlTopPos);
+            }
+        },
+        stop: function() {
+            controlLeftPos=parseInt(objRepo.bottomRightControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.bottomRightControl.css('top').replace('px',''));
+            moveBottomRightControl(controlLeftPos,controlTopPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    // Bottom-left corner control
+    objRepo.bottomLeftControl.draggable({ 
+        containment: "#bottomLeftBox",
+        cursor: "nesw-resize",
+        start: function() {
+            $('.visualIframe').css('pointer-events','none');
+        },
+        drag: function() {
+            controlLeftPos=parseInt(objRepo.bottomLeftControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.bottomLeftControl.css('top').replace('px',''));
+            if( (controlLeftPos+controlTopPos)%updateInterval == 0){
+                moveBottomLeftControl(controlLeftPos,controlTopPos);
+            }
+        },
+        stop: function() {
+            controlLeftPos=parseInt(objRepo.bottomLeftControl.css('left').replace('px',''));
+            controlTopPos=parseInt(objRepo.bottomLeftControl.css('top').replace('px',''));
+            moveBottomLeftControl(controlLeftPos,controlTopPos);
+            ConvertAnchorToPercentage();
+            $('.visualIframe').css('pointer-events','auto');
+        }
+    });
+
+    outerContainerProps.heightOnVisualAdd = objRepo.outerContainer.height();
+    outerContainerProps.widthOnVisualAdd = objRepo.outerContainer.width();
+}
+// Sets up the boundary/control points for resizing
+function DrawDragControls(currentControlId){
+    WriteDebugInfo('In DrawDragControls function');
+
+    outerContainerProps.height = objRepo.outerContainer.height();
+    outerContainerProps.width = objRepo.outerContainer.width();
+
+    currentVisualProps.top  = objRepo.currentVisual.position().top;
+    currentVisualProps.left = objRepo.currentVisual.position().left;
+    currentVisualProps.bottom = objRepo.currentVisual.position().top + objRepo.currentVisual.height();
+    currentVisualProps.right = objRepo.currentVisual.position().left + objRepo.currentVisual.width();
+    currentVisualProps.height = objRepo.currentVisual.height();
+    currentVisualProps.width = objRepo.currentVisual.width();
+
+    innerBoxProps.top = currentVisualProps.top+(currentVisualProps.height/2)-25;
+    innerBoxProps.left = currentVisualProps.left+(currentVisualProps.width/2)-25;
+    innerBoxProps.vmid = currentVisualProps.top+(currentVisualProps.height/2);
+    innerBoxProps.hmid = currentVisualProps.left+(currentVisualProps.width/2);
+    innerBoxProps.bottom = currentVisualProps.top+(currentVisualProps.height/2)+25;
+    innerBoxProps.right = currentVisualProps.left+(currentVisualProps.width/2)+25;
+
+    objRepo.innerBox.height(50);
+    objRepo.innerBox.width(50);
+    objRepo.innerBox.css('top',innerBoxProps.top)
+    objRepo.innerBox.css('left',innerBoxProps.left)
+
+    // Setting boundaries for all control points
+    // Left boundary
+    objRepo.leftBox.css('top',innerBoxProps.top)
+    objRepo.leftBox.css('left',0)
+    objRepo.leftBox.height(innerBoxProps.height)
+    objRepo.leftBox.width(innerBoxProps.left)
+
+    // Right boundary
+    objRepo.rightBox.css('top',innerBoxProps.top)
+    objRepo.rightBox.height(innerBoxProps.height)
+    objRepo.rightBox.width(outerContainerProps.width - innerBoxProps.right)
+    objRepo.rightBox.css('left',innerBoxProps.right)
+
+    // Top boundary
+    objRepo.topBox.css('top',0)
+    objRepo.topBox.css('left',innerBoxProps.left)
+    objRepo.topBox.height(innerBoxProps.top)
+    objRepo.topBox.width(innerBoxProps.width)
+
+    // Bottom boundary
+    objRepo.bottomBox.css('left',innerBoxProps.left)
+    objRepo.bottomBox.height(outerContainerProps.height - innerBoxProps.bottom)
+    objRepo.bottomBox.width(innerBoxProps.width)
+    objRepo.bottomBox.css('top',innerBoxProps.bottom)
+
+    // Top-left boundary
+    objRepo.topLeftBox.css('top',0)
+    objRepo.topLeftBox.css('left',0)
+    objRepo.topLeftBox.height(innerBoxProps.top)
+    objRepo.topLeftBox.width(innerBoxProps.left)
+
+    // Top-right boundary
+    objRepo.topRightBox.css('top',0)
+    objRepo.topRightBox.height(innerBoxProps.top)
+    objRepo.topRightBox.width(outerContainerProps.width - innerBoxProps.right)
+    objRepo.topRightBox.css('left',innerBoxProps.right)
+
+    // Bottom-left boundary
+    objRepo.bottomLeftBox.css('left',0)
+    objRepo.bottomLeftBox.height(outerContainerProps.height - innerBoxProps.bottom)
+    objRepo.bottomLeftBox.width(innerBoxProps.left)
+    objRepo.bottomLeftBox.css('top', innerBoxProps.bottom)
+
+    // Bottom-right boundary
+    objRepo.bottomRightBox.height(outerContainerProps.height - innerBoxProps.bottom)
+    objRepo.bottomRightBox.width(outerContainerProps.width - innerBoxProps.right)
+    objRepo.bottomRightBox.css('top',innerBoxProps.bottom)
+    objRepo.bottomRightBox.css('left',innerBoxProps.right)
+
+    // Positioning the control handles
+    if (currentControlId != 'leftControl'){
+        objRepo.leftControl.css('top',innerBoxProps.vmid - controlDim/2)
+        objRepo.leftControl.css('left',currentVisualProps.left)
+    }
+
+    if (currentControlId != 'topControl'){
+        objRepo.topControl.css('top',currentVisualProps.top)
+        objRepo.topControl.css('left',innerBoxProps.hmid - controlDim/2)
+    }
+    if (currentControlId != 'rightControl'){
+        objRepo.rightControl.css('top',innerBoxProps.vmid - controlDim/2)
+        objRepo.rightControl.css('left',currentVisualProps.right-controlDim)
+    }
+    if (currentControlId != 'bottomControl'){
+        objRepo.bottomControl.css('top',currentVisualProps.bottom-controlDim)
+        objRepo.bottomControl.css('left',innerBoxProps.hmid - controlDim/2)
+    }
+    if (currentControlId != 'topLeftControl'){
+        objRepo.topLeftControl.css('top',currentVisualProps.top)
+        objRepo.topLeftControl.css('left',currentVisualProps.left)
+    }
+
+    if (currentControlId != 'topRightControl'){
+        objRepo.topRightControl.css('top',currentVisualProps.top)
+        objRepo.topRightControl.css('left',currentVisualProps.right - controlDim)
+    }
+
+    if (currentControlId != 'bottomRightControl'){
+        objRepo.bottomRightControl.css('top',currentVisualProps.bottom - controlDim)
+        objRepo.bottomRightControl.css('left',currentVisualProps.right - controlDim)
+    }
+    if (currentControlId != 'bottomLeftControl'){
+        objRepo.bottomLeftControl.css('top',currentVisualProps.bottom - controlDim)
+        objRepo.bottomLeftControl.css('left',currentVisualProps.left)
+    }
+
+    objRepo.closeControl.css('top',currentVisualProps.top + controlDim*2)
+    objRepo.closeControl.css('left',currentVisualProps.right - controlDim*2)
+}
+// Resize handlers for each control point
+function moveLeftControl(controlPos){
+    objRepo.currentVisual.css('left',controlPos);
+    objRepo.currentVisual.width(currentVisualProps.right-controlPos);
+    DrawDragControls('leftControl');
+}
+
+function moveTopControl(controlPos){
+    objRepo.currentVisual.css('top',controlPos);
+    objRepo.currentVisual.height(currentVisualProps.bottom-controlPos);
+    DrawDragControls('topControl');
+}
+
+function moveRightControl(controlPos){
+    if (controlPos >= outerContainerProps.width-controlDim){
+        controlPos = outerContainerProps.width-controlDim;
+    }
+    objRepo.currentVisual.width(controlPos - currentVisualProps.left + controlDim);
+    DrawDragControls('rightControl');
+}
+
+function moveBottomControl(controlPos){
+    if (controlPos >= outerContainerProps.height-controlDim){
+        controlPos = outerContainerProps.height-controlDim;
+    }
+    objRepo.currentVisual.height(controlPos - currentVisualProps.top + controlDim);
+    DrawDragControls('bottomControl');
+}
+
+function moveTopLeftControl(controlLeftPos, controlTopPos){
+    objRepo.currentVisual.css('left',controlLeftPos);
+    objRepo.currentVisual.css('top',controlTopPos);
+    objRepo.currentVisual.width(currentVisualProps.right-controlLeftPos);
+    objRepo.currentVisual.height(currentVisualProps.bottom-controlTopPos);
+    DrawDragControls('topLeftControl');
+}
+
+function moveTopRightControl(controlLeftPos, controlTopPos){
+    if (controlLeftPos >= outerContainerProps.width-controlDim){
+        controlLeftPos = outerContainerProps.width-controlDim;
+    }
+    objRepo.currentVisual.width(controlLeftPos + controlDim - currentVisualProps.left);
+    objRepo.currentVisual.css('top',controlTopPos);
+    objRepo.currentVisual.height(currentVisualProps.bottom-controlTopPos);
+    DrawDragControls('topRightControl');
+}
+
+function moveBottomRightControl(controlLeftPos, controlTopPos){
+    if (controlLeftPos >= outerContainerProps.width-controlDim){
+        controlLeftPos = outerContainerProps.width-controlDim;
+    }
+    if (controlTopPos >= outerContainerProps.height-controlDim){
+        controlTopPos = outerContainerProps.height-controlDim;
+    }
+    objRepo.currentVisual.width(controlLeftPos + controlDim - currentVisualProps.left);
+    objRepo.currentVisual.height(controlTopPos + controlDim - currentVisualProps.top);
+    DrawDragControls('bottomRightControl');
+}
+
+function moveBottomLeftControl(controlLeftPos, controlTopPos){
+    if (controlTopPos >= outerContainerProps.height-controlDim){
+        controlTopPos = outerContainerProps.height-controlDim;
+    }
+    objRepo.currentVisual.css('left',controlLeftPos);
+    objRepo.currentVisual.width(currentVisualProps.right-controlLeftPos);
+    objRepo.currentVisual.height(controlTopPos + controlDim - currentVisualProps.top);
+    DrawDragControls('bottomLeftControl');
+}
+// Focus a visual to show controls
+function focusVisual(currentVisualId){
+    WriteDebugInfo('In focusVisual function');
+    objRepo.currentVisual = $('#'+currentVisualId);
+    objRepo.currentVisual.css('z-index','90');
+    $('.VisualContainer:not(#' + currentVisualId + ')').css('z-index','10');
+    if (objRepo.currentVisual.height() > innerBoxProps.height && objRepo.currentVisual.width() > innerBoxProps.width) {
+        DrawDragControls();
+    }
+    if (event){
+        event.stopPropagation();
+    }
+}
+
+// Hide resize controls
+function HideControls(){
+    WriteDebugInfo('In HideControls function');
+    $('.DragControl').css('left','-20');
+}
+
+// Load a saved layout with proper scaling
+function LoadLayout(viewName, layoutListEntryId){
+    WriteDebugInfo('In LoadLayout function');
+    $('#LayoutContainer').css('cursor','not-allowed');
+    $('#LayoutContainer').attr('title','Please wait - Loading visuals.');
+    $('.LayoutListEntry').css('pointer-events','none');
+    
+    $('.LayoutListEntry').css('border-color','#8f8f9d');
+    $('#'+layoutListEntryId).css('border-color','blue');
+    $('#ViewName')[0].value = viewName;
+    HideControls();
+    $('.VisualContainer, .InitialMessage').remove();
+    ResetVisualChoiceState();
+    scaleFactor = objRepo.outerContainer.width()/layoutInfo[viewName].outerContainerWidth;
+
+    for (index in layoutInfo[viewName].visualContainers){
+        visualContainer = layoutInfo[viewName].visualContainers[index];
+        visualChoiceId = visualContainer.id.replace('Visual','VisualChoice');
+        ChangeVisualChoiceState(visualChoiceId,'disable');
+        imgSrc = $('#'+visualChoiceId +' img')[0].src;
+        objRepo.outerContainer.append("<div id='" + visualContainer.id + "' style='top:" + visualContainer.top * scaleFactor +"px;left:" + visualContainer.left * scaleFactor + "px;height:" + visualContainer.height * scaleFactor +"px;width:"+visualContainer.width * scaleFactor +"px;' class='VisualContainer' onclick='focusVisual(this.id)'><div style='height:10%;'></div><img src='"+imgSrc+"' style='height:75%;width:75%;padding-left:10%;'></img></div>");
+        objRepo.currentVisual = $('#'+visualContainer.id);
+        ConvertAnchorToPercentage();
+        $('#'+visualContainer.id).draggable({
+            containment: "#OuterContainer",
+            start:function(){
+                HideControls();
+                $('#OuterContainer').css('border-color','#219fd7');
+                $('.visualIframe').css('pointer-events','none');
+            },
+            drag:function(){},
+            stop: function(){
+                objRepo.currentVisual = $('#'+this.id);
+                ConvertAnchorToPercentage();
+                $('#OuterContainer').css('border-color','white');
+                $('.visualIframe').css('pointer-events','auto');
+            }
+        });
+        QueueVisualLoad((index%2)+1, visualContainer.id, $('#'+visualContainer.id.replace('Visual','VisualChoice'))[0].dataset.visualid );
+    }
+    if ( awsData.visualQueue1.length > 0 ){
+        awsData.visualQueue1.shift()();
+    }
+    if ( awsData.visualQueue2.length > 0 ){
+        awsData.visualQueue2.shift()();
+    }
+}
+
+
+</script>
 </body>
 </html>
